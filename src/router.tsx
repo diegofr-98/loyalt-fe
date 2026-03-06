@@ -1,0 +1,48 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import Landing from "@/pages/Landing"
+import Login from "@/pages/Singin"
+import Register from "@/pages/Singup"
+import Dashboard from "@/pages/dashboard/Dashboard"
+import Customers from "@/pages/dashboard/Customers"
+import Campaigns from "@/pages/dashboard/Campaigns"
+import ProtectedRoute from "./components/protectedRoute"
+
+export function AppRouter() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/signin" element={<Login />} />
+        <Route path="/signup" element={<Register />} />
+
+        {/* protegidas */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/customers"
+          element={
+            <ProtectedRoute>
+              <Customers />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/campaigns"
+          element={
+            <ProtectedRoute>
+              <Campaigns />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  )
+}
