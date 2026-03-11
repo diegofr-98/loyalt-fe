@@ -1,6 +1,6 @@
 import type { ReactNode } from "react"
 import { AppSidebar } from "../components/AppSidebar"
-import { useAuth } from "../hooks/useAuth"
+import { useBusiness } from "../hooks/useBusiness"
 
 import {
   SidebarProvider,
@@ -22,9 +22,9 @@ export default function DashboardLayout({
 
 function DashboardLayoutContent({ children }: { children: ReactNode }) {
   const { open } = useSidebar()
-  const { session } = useAuth()
+  const { business } = useBusiness()
 
-  const name = session?.user.user_metadata.name ?? "Usuario"
+  const name = business?.name ?? "Usuario"
 
   return (
     <div className="flex min-h-screen w-full">

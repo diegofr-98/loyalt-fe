@@ -6,6 +6,7 @@ import Dashboard from "@/pages/dashboard/Dashboard"
 import Customers from "@/pages/dashboard/Customers"
 import Campaigns from "@/pages/dashboard/Campaigns"
 import ProtectedRoute from "./components/protectedRoute"
+import Business from "./pages/other/Business"
 
 export function AppRouter() {
   return (
@@ -16,6 +17,15 @@ export function AppRouter() {
         <Route path="/signup" element={<Register />} />
 
         {/* protegidas */}
+        <Route
+          path="/business"
+          element={
+            <ProtectedRoute>
+              <Business />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/dashboard"
           element={

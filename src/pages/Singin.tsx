@@ -6,9 +6,13 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
+
 import z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+
+import { useBusiness } from "@/hooks/useBusiness"
+import { fetchBusinessByOwnerId } from "@/api/requests"
 
 const schema = z.object({
   email: z.string().email(),
@@ -19,6 +23,7 @@ type FormData = z.infer<typeof schema>
 
 export default function Login() {
   const navigate = useNavigate()
+  const { setBusiness } = useBusiness()
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -36,7 +41,7 @@ export default function Login() {
     setLoading(true)
     setError(null)
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email: form.email,
       password: form.password,
     })
@@ -47,7 +52,16 @@ export default function Login() {
       return
     }
 
-    navigate("/dashboard")
+    const business = await fetchBusinessByOwnerId(data.user.id, data.session.access_token);
+
+    if (business) {
+      setBusiness(business)
+      navigate("/dashboard")
+    } else {
+      navigate("/business")
+    }
+
+    setLoading(false)
   }
 
   return (
