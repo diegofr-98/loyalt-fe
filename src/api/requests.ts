@@ -25,7 +25,7 @@ export const fetchBusinessByOwnerId = async (
 export const createBusiness = async (
   businessName: string,
   businessTypeId: string,
-  logoURL: string,
+  logoUrl: string,
   token: string
 ) => {
   const response = await fetch(`${BASE_URL}/business`, {
@@ -37,7 +37,7 @@ export const createBusiness = async (
     body: JSON.stringify({
       businessName,
       businessTypeId,
-      logoURL,
+      logoUrl,
     }),
   });
 
