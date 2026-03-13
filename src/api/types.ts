@@ -13,3 +13,19 @@ export const BusinessSchema = z.object({
 });
 
 export type Business = z.infer<typeof BusinessSchema>;
+
+export type CustomersResponse = {
+  content: Customer[]
+  totalPages: number
+  totalElements: number
+  number: number
+}
+
+export type Customer = {
+  id: string
+  email: string
+  phone: string
+  points: number
+  googleObjectId: string
+  createdAt: string
+}
