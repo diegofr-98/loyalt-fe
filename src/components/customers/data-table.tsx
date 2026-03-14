@@ -1,6 +1,6 @@
 "use client"
 
-import { Fragment, useState } from "react"
+import { Fragment, useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import {
   flexRender,
@@ -9,7 +9,12 @@ import {
   getFilteredRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import type { ColumnDef, SortingState, ColumnFiltersState, VisibilityState } from "@tanstack/react-table"
+import type {
+  ColumnDef,
+  SortingState,
+  ColumnFiltersState,
+  VisibilityState,
+} from "@tanstack/react-table"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -30,14 +35,6 @@ import {
 
 import ExpandedRow from "./ExpandedRow"
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
-  page: number
-  totalPages: number
-  onPageChange: (page: number) => void
-}
-
 export const formatDate = (dateString: string) => {
   const date = new Date(dateString)
 
@@ -48,13 +45,27 @@ export const formatDate = (dateString: string) => {
   }).format(date)
 }
 
-export function DataTable<TData, TValue>({
+interface DataTableProps<TData, TValue> {
+  columns: ColumnDef<TData, TValue>[]
+  data: TData[]
+  page: number
+  totalPages: number
+  onPageChange: (page: number) => void
+}
+
+export function DataTable<TData extends { id: string; points?: number }, TValue>({
   columns,
   data,
   page,
   totalPages,
   onPageChange,
 }: DataTableProps<TData, TValue>) {
+
+  const [tableData, setTableData] = useState<TData[]>(data)
+
+  useEffect(() => {
+    setTableData(data)
+  }, [data])
 
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] =
@@ -66,8 +77,22 @@ export function DataTable<TData, TValue>({
     type: "add" | "subtract"
   } | null>(null)
 
+  // 🔥 actualizar puntos localmente
+  const updateCustomerPoints = (customerId: string, delta: number) => {
+    setTableData((prev) =>
+      prev.map((customer) =>
+        customer.id === customerId
+          ? {
+              ...customer,
+              points: (customer.points ?? 0) + delta,
+            }
+          : customer
+      )
+    )
+  }
+
   const table = useReactTable({
-    data,
+    data: tableData,
     columns,
     state: {
       sorting,
@@ -75,7 +100,7 @@ export function DataTable<TData, TValue>({
       columnVisibility,
     },
     meta: {
-      setExpandedRow
+      setExpandedRow,
     },
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -89,6 +114,7 @@ export function DataTable<TData, TValue>({
     <div className="space-y-4">
 
       {/* SEARCH + COLUMN VISIBILITY */}
+
       <div className="flex items-center justify-between">
 
         <Input
@@ -111,19 +137,17 @@ export function DataTable<TData, TValue>({
             {table
               .getAllColumns()
               .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value: any) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                )
-              })}
+              .map((column) => (
+                <DropdownMenuCheckboxItem
+                  key={column.id}
+                  checked={column.getIsVisible()}
+                  onCheckedChange={(value: any) =>
+                    column.toggleVisibility(!!value)
+                  }
+                >
+                  {column.id}
+                </DropdownMenuCheckboxItem>
+              ))}
           </DropdownMenuContent>
         </DropdownMenu>
 
@@ -137,25 +161,23 @@ export function DataTable<TData, TValue>({
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead
-                      key={header.id}
-                      className="cursor-pointer select-none"
-                      onClick={header.column.getToggleSortingHandler()}
-                    >
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                {headerGroup.headers.map((header) => (
+                  <TableHead
+                    key={header.id}
+                    className="cursor-pointer select-none"
+                    onClick={header.column.getToggleSortingHandler()}
+                  >
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
 
-                      {{
-                        asc: " 🔼",
-                        desc: " 🔽",
-                      }[header.column.getIsSorted() as string] ?? null}
-                    </TableHead>
-                  )
-                })}
+                    {{
+                      asc: " 🔼",
+                      desc: " 🔽",
+                    }[header.column.getIsSorted() as string] ?? null}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
@@ -187,8 +209,9 @@ export function DataTable<TData, TValue>({
                       >
                         <ExpandedRow
                           type={expandedRow.type}
-                          customerId={row.id}
+                          customerId={row.original.id}
                           onClose={() => setExpandedRow(null)}
+                          onPointsChange={updateCustomerPoints}
                         />
                       </motion.div>
                     </TableCell>

@@ -20,6 +20,8 @@ export default function DashboardLayout({
   )
 }
 
+import { Toaster } from "sonner"
+
 function DashboardLayoutContent({ children }: { children: ReactNode }) {
   const { open } = useSidebar()
   const { business } = useBusiness()
@@ -32,6 +34,7 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
 
       <SidebarInset className={open ? "flex-1 ml-32" : "flex-1"}>
         {children}
+        <Toaster richColors />
       </SidebarInset>
     </div>
   )

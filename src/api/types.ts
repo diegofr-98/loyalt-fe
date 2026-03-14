@@ -29,3 +29,18 @@ export type Customer = {
   googleObjectId: string
   createdAt: string
 }
+
+
+export type Promotion = {
+  uuid: string
+  businessId: string
+  name: string
+  points: number
+}
+
+export type Reward = {
+  uuid: string
+  businessId: string
+  name: string
+  costPoints: number
+}
