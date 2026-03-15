@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useNavigate, Link } from "react-router-dom"
+import { useNavigate, useParams  } from "react-router-dom"
 import { supabase } from "../lib/supabaseClient"
 
 import { Button } from "@/components/ui/button"
@@ -8,31 +8,70 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Label } from "@/components/ui/label"
 
 export default function Customer() {
-    const navigate = useNavigate()
 
+    const navigate = useNavigate()
     const [email, setEmail] = useState("")
-    const [phone, setPhone] = useState("")
-    const [business, setBusiness] = useState("")
+    const [phoneNumber, setPhone] = useState("")
+
     const [error, setError] = useState<string | null>(null)
     const [loading, setLoading] = useState(false)
+
+    const { businessId } = useParams()
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault()
         setLoading(true)
         setError(null)
 
-        const { error } = await supabase.auth.signInWithPassword({
-            email,
-            phone,
-        })
+        try {
+            // 1️⃣ Crear customer
+            const customerResponse = await fetch("http://localhost:8080/api/v1/customer", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email,
+                    phoneNumber,
+                }),
+            })
 
-        if (error) {
-            setError(error.message)
-        } else {
+            const customerData = await customerResponse.json()
+
+            if (!customerResponse.ok) {
+                throw new Error(customerData.message || "Error creando el customer")
+            }
+
+            const { customerId } = customerData
+
+            // 2️⃣ Crear relación customer-business
+            const relationResponse = await fetch(
+                "http://localhost:8080/api/v1/customer/customer-business", {
+
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    customerId,
+                    businessId, // viene desde la URL
+            })
+                })
+
+
+            const relationData = await relationResponse.json()
+
+            if (!relationResponse.ok) {
+                throw new Error(relationData.message || "Error vinculando customer con business")
+            }
+
             navigate("/wallet")
-        }
 
-        setLoading(false)
+        } catch (err: any) {
+            setError(err.message)
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
@@ -63,7 +102,7 @@ export default function Customer() {
                                 id="form-phone"
                                 type="tel"
                                 placeholder="+1 (555) 123-4567"
-                                value={phone}
+                                value={phoneNumber}
                                 onChange={(e) => setPhone(e.target.value)}
                                 required
                             />

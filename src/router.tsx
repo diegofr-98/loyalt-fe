@@ -8,6 +8,7 @@ import Customers from "@/pages/dashboard/Customers"
 import Campaigns from "@/pages/dashboard/Campaigns"
 import ProtectedRoute from "./components/protectedRoute"
 import Business from "./pages/other/Business"
+import Wallet from "@/pages/Wallet.tsx"
 
 export function AppRouter() {
   return (
@@ -17,7 +18,8 @@ export function AppRouter() {
         <Route path="/signin" element={<Login />} />
         <Route path="/signup" element={<Register />} />
 
-          <Route path="/customer" element={<Customer />} />
+          <Route path="/customer/:businessId" element={<Customer />} />
+          <Route path="/wallet" element={<Wallet />} />
 
         {/* protegidas */}
         <Route
