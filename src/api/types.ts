@@ -23,6 +23,7 @@ export type CustomersResponse = {
 
 export type Customer = {
   id: string
+  customerId: string
   email: string
   phone: string
   points: number

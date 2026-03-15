@@ -53,7 +53,7 @@ interface DataTableProps<TData, TValue> {
   onPageChange: (page: number) => void
 }
 
-export function DataTable<TData extends { id: string; points?: number }, TValue>({
+export function DataTable<TData extends { customerId: string; points?: number }, TValue>({
   columns,
   data,
   page,
@@ -77,11 +77,10 @@ export function DataTable<TData extends { id: string; points?: number }, TValue>
     type: "add" | "subtract"
   } | null>(null)
 
-  // 🔥 actualizar puntos localmente
   const updateCustomerPoints = (customerId: string, delta: number) => {
     setTableData((prev) =>
       prev.map((customer) =>
-        customer.id === customerId
+        customer.customerId === customerId
           ? {
               ...customer,
               points: (customer.points ?? 0) + delta,
@@ -119,9 +118,9 @@ export function DataTable<TData extends { id: string; points?: number }, TValue>
 
         <Input
           placeholder="Buscar por ID..."
-          value={(table.getColumn("id")?.getFilterValue() as string) ?? ""}
+          value={(table.getColumn("customerId")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("id")?.setFilterValue(event.target.value)
+            table.getColumn("customerId")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -209,7 +208,7 @@ export function DataTable<TData extends { id: string; points?: number }, TValue>
                       >
                         <ExpandedRow
                           type={expandedRow.type}
-                          customerId={row.original.id}
+                          customerId={row.original.customerId}
                           onClose={() => setExpandedRow(null)}
                           onPointsChange={updateCustomerPoints}
                         />

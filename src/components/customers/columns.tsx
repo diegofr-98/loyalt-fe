@@ -7,7 +7,7 @@ import { MoreHorizontal } from "lucide-react"
 
 export const columns: ColumnDef<Customer>[] = [
   {
-    accessorKey: "id",
+    accessorKey: "customerId",
     header: "ID",
   },
   {
