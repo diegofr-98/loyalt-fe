@@ -1,74 +1,49 @@
 import { useState } from "react"
 import { useNavigate, useParams  } from "react-router-dom"
-import { supabase } from "../lib/supabaseClient"
-
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
+import { useCustomer } from "@/hooks/useCustomer"
 
 export default function Customer() {
 
     const navigate = useNavigate()
+
+    const { businessId } = useParams()
+
+    const { registerCustomer } = useCustomer()
     const [email, setEmail] = useState("")
     const [phoneNumber, setPhone] = useState("")
+
 
     const [error, setError] = useState<string | null>(null)
     const [loading, setLoading] = useState(false)
 
-    const { businessId } = useParams()
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault()
         setLoading(true)
         setError(null)
 
+        if (!businessId) {
+            setError("BusinessId no encontrado en la URL")
+            setLoading(false)
+            return
+        }
+
         try {
-            // 1️⃣ Crear customer
-            const customerResponse = await fetch("http://localhost:8080/api/v1/customer", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    email,
-                    phoneNumber,
-                }),
-            })
 
-            const customerData = await customerResponse.json()
+            const { customer, customerBusiness } =
+                await registerCustomer(email, phoneNumber, businessId!)
 
-            if (!customerResponse.ok) {
-                throw new Error(customerData.message || "Error creando el customer")
-            }
-
-            const { customerId } = customerData
-
-            // 2️⃣ Crear relación customer-business
-            const relationResponse = await fetch(
-                "http://localhost:8080/api/v1/customer/customer-business", {
-
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    customerId,
-                    businessId, // viene desde la URL
-            })
-                })
-
-
-            const relationData = await relationResponse.json()
-
-            if (!relationResponse.ok) {
-                throw new Error(relationData.message || "Error vinculando customer con business")
-            }
+            console.log(customer)
+            console.log(customerBusiness)
 
             navigate("/wallet")
 
-        } catch (err: any) {
-            setError(err.message)
+        } catch (error: any) {
+            setError(error.message)
         } finally {
             setLoading(false)
         }
@@ -117,9 +92,6 @@ export default function Customer() {
                         <Button type="submit" className="w-full" disabled={loading}>
                             {loading ? "Enviando..." : "Enviar"}
                         </Button>
-
-
-
                     </form>
                 </CardContent>
             </Card>
