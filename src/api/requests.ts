@@ -153,3 +153,49 @@ export const createRedemption = async (
 
   return response.json()
 }
+
+export const createCustomer = async (
+    email: string,
+    phoneNumber: string
+  ) => {
+  const response = await fetch(`${BASE_URL}/customer`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email,
+      phoneNumber,
+    }),
+  })
+
+  if (!response.ok) {
+    const error = await response.text()
+    throw new Error(error || "Error creting redemption")
+  }
+
+  return response.json()
+}
+
+export const createCustomerBusiness = async (
+    customerId: string,
+    businessId: string,
+) => {
+  const response = await fetch(`${BASE_URL}/customer/customer-business`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      customerId,
+      businessId,
+    }),
+  })
+
+  if (!response.ok) {
+    const error = await response.text()
+    throw new Error(error || "Error linking customer with business")
+  }
+
+  return response.json()
+}

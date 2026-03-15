@@ -30,6 +30,11 @@ export type Customer = {
   createdAt: string
 }
 
+export type CreateCustomer = {
+  customerId:string
+  businessId: string
+}
+
 
 export type Promotion = {
   uuid: string

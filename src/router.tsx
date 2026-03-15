@@ -2,11 +2,13 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Landing from "@/pages/Landing"
 import Login from "@/pages/Singin"
 import Register from "@/pages/Singup"
+import Customer from "@/pages/Customer.tsx"
 import Dashboard from "@/pages/dashboard/Dashboard"
 import Customers from "@/pages/dashboard/Customers"
 import Campaigns from "@/pages/dashboard/Campaigns"
 import ProtectedRoute from "./components/protectedRoute"
 import Business from "./pages/other/Business"
+import Wallet from "@/pages/Wallet.tsx"
 
 export function AppRouter() {
   return (
@@ -15,6 +17,9 @@ export function AppRouter() {
         <Route path="/" element={<Landing />} />
         <Route path="/signin" element={<Login />} />
         <Route path="/signup" element={<Register />} />
+
+          <Route path="/customer/:businessId" element={<Customer />} />
+          <Route path="/wallet" element={<Wallet />} />
 
         {/* protegidas */}
         <Route
