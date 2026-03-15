@@ -1,143 +1,103 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useNavigate, Link } from "react-router-dom"
-import { supabase } from "../lib/supabaseClient"
-
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { supabase } from "@/lib/supabaseClient"
 import { Button } from "@/components/ui/button"
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Label } from "@/components/ui/label"
+
+const schema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+})
+
+type FormData = z.infer<typeof schema>
 
 export default function Register() {
   const navigate = useNavigate()
 
-  const [bussinesTypes, getBussinesTypes] = useState<any[] | null>(null)
-  const [businessType, setBusinessType] = useState<string>("")
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [message, setMessage] = useState<string | null>(null)
 
-  useEffect(() => {
-    const fetchBussinesTypes = async () => {
-      const { data } = await supabase.from('business_type').select('*')
-      getBussinesTypes(data)
-    }
-    fetchBussinesTypes()
-  }, [])
+  const {
+    register,
+    handleSubmit,
+    formState: { isValid },
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+    mode: "onChange",
+  })
 
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const onSubmit = async (form: FormData) => {
     setLoading(true)
     setError(null)
-    setMessage(null)
-console.log(businessType)
-    const { data ,error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          name,
-          business_type_id: businessType
-        }
-      }
+
+    const { error } = await supabase.auth.signUp({
+      email: form.email,
+      password: form.password,
     })
-
-    // llamar creacion negocio
-    // eliminar name y bussinessType de options
-    // desactivar trigger creacion empreasa en supabase
-    // agregar campo logo empresa
-
-    console.log(data)
 
     if (error) {
       setError(error.message)
-    } else {
-      navigate("/dashboard")
+      setLoading(false)
+      return
     }
 
-    setLoading(false)
+    navigate("/business")
   }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted/40 px-4">
       <Card className="w-full max-w-md">
+
         <CardHeader>
           <CardTitle>Crear cuenta</CardTitle>
           <CardDescription>
-            Regístrate para acceder a tu panel
+            Regístrate para empezar
           </CardDescription>
         </CardHeader>
 
         <CardContent>
-          <form onSubmit={handleRegister} className="space-y-4">
-            <Input
-              type="text"
-              placeholder="Nombre del negocio"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
 
-            <Select value={businessType} onValueChange={setBusinessType}>
-              <SelectTrigger>
-                <SelectValue placeholder={businessType ? businessType : "Tipo de negocio"} />
-              </SelectTrigger>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
-              <SelectContent>
-                {bussinesTypes?.map((type) => (
-                  <SelectItem key={type.id} value={type.id}>
-                    {type.type}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
+            <Label htmlFor="email">Correo</Label>
             <Input
               type="email"
               placeholder="Correo electrónico"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
+              {...register("email")}
             />
 
+            <Label htmlFor="password">Contraseña</Label>
             <Input
               type="password"
               placeholder="Contraseña"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
+              {...register("password")}
             />
 
-            <Button className="w-full" disabled={loading}>
-              {loading ? "Registrando..." : "Registrarse"}
+            <Button
+              className="w-full"
+              disabled={!isValid || loading}
+            >
+              {loading ? "Registrando..." : "Continuar"}
             </Button>
+
           </form>
 
           {error && (
             <p className="text-sm text-red-500 mt-4">{error}</p>
           )}
 
-          {message && (
-            <p className="text-sm text-green-500 mt-4">{message}</p>
-          )}
-
           <p className="text-sm text-muted-foreground mt-6 text-center">
             ¿Ya tienes cuenta?{" "}
-            <Link
-              to="/signin"
-              className="text-primary hover:underline"
-            >
+            <Link to="/signin" className="text-primary hover:underline">
               Inicia sesión
             </Link>
           </p>
+
         </CardContent>
       </Card>
     </div>
