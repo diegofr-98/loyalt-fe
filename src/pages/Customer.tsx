@@ -1,28 +1,33 @@
 import { useState } from "react"
-import { useNavigate, useParams  } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+    Empty,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from "@/components/ui/empty"
+import { Spinner } from "@/components/ui/spinner"
 import { Label } from "@/components/ui/label"
 import { useCustomer } from "@/hooks/useCustomer"
 
 export default function Customer() {
 
     const navigate = useNavigate()
-
     const { businessId } = useParams()
-
     const { registerCustomer } = useCustomer()
+
     const [email, setEmail] = useState("")
     const [phoneNumber, setPhone] = useState("")
-
-
     const [error, setError] = useState<string | null>(null)
     const [loading, setLoading] = useState(false)
 
-
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault()
+
         setLoading(true)
         setError(null)
 
@@ -35,25 +40,46 @@ export default function Customer() {
         try {
 
             const { customer, customerBusiness } =
-                await registerCustomer(email, phoneNumber, businessId!)
+                await registerCustomer(email, phoneNumber, businessId)
 
             console.log(customer)
             console.log(customerBusiness)
 
-            navigate("/wallet")
+            navigate("/wallet", {
+                state: { customerBusiness }
+            })
 
         } catch (error: any) {
             setError(error.message)
-        } finally {
             setLoading(false)
         }
+    }
+
+    if (loading) {
+        return (
+            <div className="flex min-h-screen items-center justify-center px-4">
+                <Empty className="w-full max-w-sm">
+                    <EmptyHeader>
+                        <EmptyMedia variant="icon">
+                            <Spinner />
+                        </EmptyMedia>
+                        <EmptyTitle>Procesando tu solicitud</EmptyTitle>
+                        <EmptyDescription>
+                            Por favor espera mientras registramos tus datos.
+                        </EmptyDescription>
+                    </EmptyHeader>
+                </Empty>
+            </div>
+        )
     }
 
     return (
         <div className="flex min-h-screen items-center justify-center px-4">
             <Card className="w-full max-w-sm">
                 <CardHeader>
-                    <CardTitle>Acumula puntos y canjealos por premios deliciosos GRATIS</CardTitle>
+                    <CardTitle>
+                        Acumula puntos y canjealos por premios deliciosos GRATIS
+                    </CardTitle>
                 </CardHeader>
 
                 <CardContent>
@@ -89,9 +115,10 @@ export default function Customer() {
                             </p>
                         )}
 
-                        <Button type="submit" className="w-full" disabled={loading}>
-                            {loading ? "Enviando..." : "Enviar"}
+                        <Button type="submit" className="w-full">
+                            Enviar
                         </Button>
+
                     </form>
                 </CardContent>
             </Card>
