@@ -1,4 +1,4 @@
-import { createCustomer, createCustomerBusiness } from "../api/requests.ts"
+import { createCustomer, createCustomerBusiness } from "@/api/requests.ts"
 
 export const useCustomer = () => {
 
