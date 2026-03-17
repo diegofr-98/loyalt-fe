@@ -180,13 +180,11 @@ export const createCustomer = async (
 export const createCustomerBusiness = async (
     customerId: string,
     businessId: string,
-    token:string
 ) => {
   const response = await fetch(`${BASE_URL}/customer/customer-business`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json"
     },
     body: JSON.stringify({
       customerId,

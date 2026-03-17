@@ -6,6 +6,7 @@ import Customer from "@/pages/Customer.tsx"
 import Dashboard from "@/pages/dashboard/Dashboard"
 import Customers from "@/pages/dashboard/Customers"
 import Campaigns from "@/pages/dashboard/Campaigns"
+import Settings from "@/pages/dashboard/Settings"
 import ProtectedRoute from "./components/protectedRoute"
 import Business from "./pages/other/Business"
 import Wallet from "@/pages/Wallet.tsx"
@@ -45,6 +46,15 @@ export function AppRouter() {
           element={
             <ProtectedRoute>
               <Customers />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/qr"
+          element={
+            <ProtectedRoute>
+              <Settings />
             </ProtectedRoute>
           }
         />
