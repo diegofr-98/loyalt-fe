@@ -1,44 +1,105 @@
-import { useEffect, useState } from "react"
+"use client"
+
+import { useState } from "react"
+import { Card, CardContent } from "@/components/ui/card"
+
+import { useCampaigns } from "@/hooks/useCampaigns"
+
+import { CampaignHeader } from "@/components/campaigns/campaign-header"
+import { CampaignTable } from "@/components/campaigns/campaign-table"
+import { CampaignPagination } from "@/components/campaigns/campaign-pagination"
+import { CampaignDialog } from "@/components/campaigns/campaign-dialog"
 import DashboardLayout from "@/layouts/DashboardLayout"
 import { SidebarTrigger } from "@/components/ui/sidebar"
+import { type Campaign } from "@/api/types"
 
-export default function Campaigns() {
+export default function CampaignPage() {
 
-  const [campaings, getCampaigns] = useState([])
+    const {
+        campaigns,
+        visibleCampaigns,
+        totalPages,
+        page,
+        setPage,
+        search,
+        setSearch,
+        createCampaign,
+        updateCampaign,
+        loading
+    } = useCampaigns()
 
-  useEffect(() => {
-    // Aquí iría la lógica para obtener las campañas desde tu backend o base de datos
-    // Por ejemplo:
-    // const fetchCampaigns = async () => {
-    //   const { data } = await supabase.from('campaigns').select('*')
-    //   setCampaigns(data)
-    // }
-    // fetchCampaigns()
-  }, [])
+    console.log(visibleCampaigns)
+    const [dialogOpen, setDialogOpen] = useState(false)
+    const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null)
 
-  return (
-        <DashboardLayout>
+    const handleCreate = () => {
+        setSelectedCampaign(null)
+        setDialogOpen(true)
+    }
+
+    const handleEdit = (campaign: Campaign) => {
+        setSelectedCampaign(campaign)
+        setDialogOpen(true)
+    }
+
+    return (
+      <DashboardLayout>
+
           <div className="p-8 space-y-8">
-
-            <div className="flex items-center gap-4">
-
-              <SidebarTrigger />
-
-              <div>
-                <h1 className="text-3xl font-bold">
-                  Campañas
-                </h1>
-
-                <p className="text-muted-foreground">
-                  Lista de campañas registradas
-                </p>
+              <div className="flex items-center gap-4">
+                  <SidebarTrigger />
               </div>
+          </div>
 
-            </div>
+          <div className="p-8 space-y-6">
 
-            {/* Aquí iría la tabla o lista de campañas */}
+              <CampaignHeader
+                search={search}
+                setSearch={setSearch}
+                onCreate={handleCreate}
+              />
+
+              <Card>
+                  <CardContent className="p-0">
+                      <CampaignTable
+                        campaigns={visibleCampaigns}
+                        onEdit={handleEdit}
+                      />
+                  </CardContent>
+              </Card>
+
+              <CampaignPagination
+                page={page}
+                totalPages={totalPages}
+                setPage={setPage}
+              />
+
+              {/* ✅ DIALOG conectado al backend */}
+              <CampaignDialog
+                open={dialogOpen}
+                onOpenChange={setDialogOpen}
+                campaign={selectedCampaign}
+                onSave={async (data) => {
+                    try {
+
+                        if (selectedCampaign) {
+                            await updateCampaign(selectedCampaign.uuid, data)
+                        } else {
+                            await createCampaign(data)
+                        }
+
+                        // ✅ cerrar dialog automáticamente
+                        setDialogOpen(false)
+
+                    } catch (error) {
+                        console.error("Error saving campaign", error)
+                    }
+                }}
+                loading={loading}
+              />
 
           </div>
-        </DashboardLayout>
-  )
+
+      </DashboardLayout>
+    )
 }
