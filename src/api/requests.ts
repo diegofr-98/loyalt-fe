@@ -1,4 +1,4 @@
-import { type Business, BusinessSchema, type CustomersResponse, type Campaign } from "./types";
+import { type Business, BusinessSchema, type CustomersResponse } from "./types";
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL + "/api/v1";
 

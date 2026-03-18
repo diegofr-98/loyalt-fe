@@ -99,7 +99,9 @@ export const useCampaigns = () => {
         finishDate: string
         points: number
     }) => {
-        if (!businessId || !token) return
+        if (!token) {
+            throw new Error("No token provided")
+        }
 
         try {
             setLoading(true)
@@ -144,8 +146,9 @@ export const useCampaigns = () => {
       }
     ) => {
 
-        if (!token || !businessId) return
-
+        if (!token) {
+            throw new Error("No token provided")
+        }
         try {
             setLoading(true)
             setError(null)

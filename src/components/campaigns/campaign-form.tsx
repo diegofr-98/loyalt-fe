@@ -4,18 +4,22 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { type Campaign } from "@/api/types"
-import { useCampaigns } from "@/hooks/useCampaigns"
+
+type FormData = {
+  name: string
+  startDate: string
+  finishDate: string
+  points: number
+}
 
 type Props = {
   campaign?: Campaign | null
-  onSubmit?: (data: Campaign) => void
+  onSubmit: (data: FormData) => void
+  loading?: boolean
 }
 
-export function CampaignForm({ campaign, onSubmit }: Props) {
+export function CampaignForm({ campaign, onSubmit, loading }: Props) {
 
-  const { createCampaign, updateCampaign, loading } = useCampaigns()
-
-  console.log(campaign, 'campaign form')
   const [name, setName] = useState(campaign?.name ?? "")
   const [points, setPoints] = useState<number>(campaign?.points ?? 0)
   const [startDate, setStartDate] = useState(campaign?.startDate ?? "")
@@ -25,33 +29,20 @@ export function CampaignForm({ campaign, onSubmit }: Props) {
     return new Date(date).toISOString()
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    try {
-      const payload = {
-        name,
-        startDate: formatDate(startDate),
-        finishDate: formatDate(finishDate),
-        points,
-      }
+    // 🔥 validación básica
+    if (!name || !startDate || !finishDate) return
 
-      let response
-
-      if (campaign) {
-        response = await updateCampaign(campaign.uuid, payload)
-        console.log("EDITING CAMPAIGN >>>", campaign)
-      } else {
-        response = await createCampaign(payload)
-      }
-
-      console.log("campaign response", response)
-
-      onSubmit?.(response)
-
-    } catch (error) {
-      console.error("Error saving campaign:", error)
+    const payload: FormData = {
+      name,
+      startDate: formatDate(startDate),
+      finishDate: formatDate(finishDate),
+      points,
     }
+
+    onSubmit(payload) // ✅ limpio, sin undefined
   }
 
   return (

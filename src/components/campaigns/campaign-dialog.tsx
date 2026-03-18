@@ -9,6 +9,14 @@ import {
 
 import { CampaignForm } from "./campaign-form"
 import { type Campaign } from "@/api/types"
+import { useCampaigns } from "@/hooks/useCampaigns"
+
+type FormData = {
+  name: string
+  startDate: string
+  finishDate: string
+  points: number
+}
 
 type Props = {
   open: boolean
@@ -24,12 +32,31 @@ export function CampaignDialog({
                                  onSuccess,
                                }: Props) {
 
-  const handleSuccess = (data: Campaign) => {
-    onSuccess?.(data)
-    onOpenChange(false)
+  const { createCampaign, updateCampaign, loading } = useCampaigns()
+
+  const handleSubmit = async (data: FormData) => {
+    try {
+      let result: Campaign
+
+      if (campaign) {
+        // ✏️ UPDATE
+        result = await updateCampaign({
+          id: campaign.uuid,
+          ...data,
+        })
+      } else {
+        // ➕ CREATE
+        result = await createCampaign(data)
+      }
+
+      onSuccess?.(result)
+      onOpenChange(false)
+
+    } catch (error) {
+      console.error("Error saving campaign:", error)
+    }
   }
 
-  console.log(campaign, 'campaign dialog')
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[420px]">
@@ -41,8 +68,9 @@ export function CampaignDialog({
         </DialogHeader>
 
         <CampaignForm
-          campaign={campaign}
-          onSubmit={handleSuccess}
+          campaign={campaign ?? undefined}
+          onSubmit={handleSubmit}
+          loading={loading}
         />
 
       </DialogContent>
