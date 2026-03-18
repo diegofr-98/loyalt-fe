@@ -79,6 +79,13 @@ export function AppSidebar({ name }: { name: string }) {
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
+              <SidebarMenuItem>
+                <SidebarMenuButton onClick={() => navigate("/qr")}>
+                  <Megaphone size={18} />
+                  QR
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
             </SidebarMenu>
 
           </SidebarGroupContent>

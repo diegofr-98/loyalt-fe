@@ -15,6 +15,8 @@ export const useCustomer = () => {
             businessId
         )
 
+        console.log(customer, 'customer')
+        console.log(customerBusiness, 'customerBusiness')
         return {
             customer,
             customerBusiness
