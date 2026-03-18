@@ -40,10 +40,10 @@ export function CampaignDialog({
 
       if (campaign) {
         // ✏️ UPDATE
-        result = await updateCampaign({
-          id: campaign.uuid,
-          ...data,
-        })
+        result = await updateCampaign(
+          campaign.uuid,
+          data
+        )
       } else {
         // ➕ CREATE
         result = await createCampaign(data)
