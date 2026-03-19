@@ -12,7 +12,6 @@ export default function Wallet() {
     const location = useLocation()
     const { customerBusiness } = location.state || {}
 
-    console.log(customerBusiness, 'customerBusiness')
 
     if (!customerBusiness) {
 
