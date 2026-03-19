@@ -29,7 +29,7 @@ export function CampaignTable({ campaigns, onEdit }: any) {
 
                 {campaigns.map((campaign: any) => (
 
-                    <TableRow key={campaign.id}>
+                    <TableRow key={campaign.uuid}>
 
                         <TableCell>{campaign.name}</TableCell>
                         <TableCell>{campaign.points}</TableCell>

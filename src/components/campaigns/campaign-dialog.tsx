@@ -9,7 +9,6 @@ import {
 
 import { CampaignForm } from "./campaign-form"
 import { type Campaign } from "@/api/types"
-import { useCampaigns } from "@/hooks/useCampaigns"
 
 type FormData = {
   name: string
@@ -22,6 +21,9 @@ type Props = {
   open: boolean
   onOpenChange: (open: boolean) => void
   campaign?: Campaign | null
+  createCampaign: (data: FormData) => Promise<Campaign>
+  updateCampaign: (uuid: string, data: FormData) => Promise<Campaign>
+  loading?: boolean
   onSuccess?: (campaign: Campaign) => void
 }
 
@@ -29,11 +31,11 @@ export function CampaignDialog({
                                  open,
                                  onOpenChange,
                                  campaign,
+                                 createCampaign,
+                                 updateCampaign,
+                                 loading,
                                  onSuccess,
                                }: Props) {
-
-  const { createCampaign, updateCampaign, loading } = useCampaigns()
-
   const handleSubmit = async (data: FormData) => {
     try {
       let result: Campaign

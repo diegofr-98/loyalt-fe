@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { type Campaign } from "@/api/types"
@@ -24,6 +24,13 @@ export function CampaignForm({ campaign, onSubmit, loading }: Props) {
   const [points, setPoints] = useState<number>(campaign?.points ?? 0)
   const [startDate, setStartDate] = useState(campaign?.startDate ?? "")
   const [finishDate, setFinishDate] = useState(campaign?.finishDate ?? "")
+
+  useEffect(() => {
+    setName(campaign?.name ?? "")
+    setPoints(campaign?.points ?? 0)
+    setStartDate(campaign?.startDate ? campaign.startDate.slice(0, 10) : "")
+    setFinishDate(campaign?.finishDate ? campaign.finishDate.slice(0, 10) : "")
+  }, [campaign])
 
   const formatDate = (date: string) => {
     return new Date(date).toISOString()

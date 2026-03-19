@@ -21,11 +21,13 @@ export default function CampaignPage() {
         page,
         setPage,
         search,
-        setSearch
+        setSearch,
+        createCampaign,
+        updateCampaign,
+        loading,
 
     } = useCampaigns()
 
-    console.log(visibleCampaigns)
     const [dialogOpen, setDialogOpen] = useState(false)
     const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null)
 
@@ -76,7 +78,9 @@ export default function CampaignPage() {
                 open={dialogOpen}
                 onOpenChange={setDialogOpen}
                 campaign={selectedCampaign}
-
+                createCampaign={createCampaign}
+                updateCampaign={updateCampaign}
+                loading={loading}
               />
 
           </div>
