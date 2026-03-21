@@ -9,7 +9,6 @@ import { Spinner } from "@/components/ui/spinner"
 import { Button } from "@/components/ui/button"
 import {
   Empty,
-  EmptyDescription,
   EmptyHeader,
   EmptyTitle,
 } from "@/components/ui/empty"
@@ -20,7 +19,6 @@ export default function Settings() {
   const qrWrapperRef = useRef<HTMLDivElement>(null)
 
   const businessId = business?.uuid
-  const businessName = business?.name
   const customerUrl =
     businessId && typeof window !== "undefined"
       ? `${window.location.origin}/customer/${businessId}`
