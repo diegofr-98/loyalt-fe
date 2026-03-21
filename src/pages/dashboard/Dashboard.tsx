@@ -18,10 +18,13 @@ import { supabase } from "@/lib/supabaseClient"
 import { useAuth } from "@/hooks/useAuth"
 import ChartExample from "@/components/DashboardChart"
 import { PointsLedgerTable } from "@/components/PointsLedgerTable"
+import { useLocation } from "react-router-dom"
 
 export default function Dashboard() {
   const { session } = useAuth()
-  
+  const location = useLocation();
+  const businessId = location.state?.businessId;
+
   const [activedCustomers, setActivedCustomers] = useState(0)
   const [emmitedPoints, setEmmitedPoints] = useState(0)
   const [totalRedeemptions, setTotalRedeemptions] = useState(0)

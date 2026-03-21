@@ -1,6 +1,6 @@
 
   import { useState } from "react"
-  import { Link } from "react-router-dom"
+  import { Link, useNavigate } from "react-router-dom"
   import { supabase } from "../lib/supabaseClient"
 
   import { Button } from "@/components/ui/button"
@@ -11,9 +11,8 @@
   import z from "zod"
   import { zodResolver } from "@hookform/resolvers/zod"
   import { useForm } from "react-hook-form"
-
-
-
+  import { fetchBusinessByOwnerId } from "@/api/requests"
+  import { useBusiness } from "@/hooks/useBusiness"
 
   const schema = z.object({
     email: z.string().email(),
@@ -23,7 +22,8 @@
   type FormData = z.infer<typeof schema>
 
   export default function Login() {
-
+    const { setBusiness } = useBusiness()
+    const navigate = useNavigate()
 
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
@@ -42,7 +42,7 @@
       setLoading(true)
       setError(null)
 
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email: form.email,
         password: form.password,
       })
@@ -53,16 +53,16 @@
         return
       }
 
-    //   const business = await fetchBusinessByOwnerId(data.user.id, data.session.access_token);
-    //
-    //   if (!business) {
-    //     // setBusiness(business)k
-    //     navigate("/dashboard")
-    //   } else {
-    //     navigate("/business")
-    //   }
-    //
-    //   setLoading(false)
+      const business = await fetchBusinessByOwnerId(data.user.id, data.session.access_token);
+    
+      if (business) {
+        navigate("/dashboard", {state: { businessId: business.uuid }})
+      } else {
+        navigate("/business")
+      }
+      
+      setBusiness(business)
+      setLoading(false)
      }
 
     return (

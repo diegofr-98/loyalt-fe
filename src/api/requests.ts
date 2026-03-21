@@ -6,7 +6,11 @@ export const fetchBusinessByOwnerId = async (
   ownerId: string,
   token: string
 ): Promise<Business | null> => {
-    const response = await fetch(`${BASE_URL}/business/${ownerId}`,{ headers: { Authorization: `Bearer ${token}` } });
+    const response = await fetch(`${BASE_URL}/business/${ownerId}`,{ 
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      } });
 
     if(!response.ok) {
         return null;
@@ -53,6 +57,7 @@ export const fetchCustomersByBusinessId = async (
   const response = await fetch(`${BASE_URL}/business/${businessId}/customers?page=${page}&size=${size}`, {
     headers: {
       Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     },
   });
 
@@ -66,6 +71,7 @@ export const fetchCustomersAnalyticsByBusinessId = async (
   const response = await fetch(`${BASE_URL}/analytics/${businessId}/customers`, {
     headers: {
       Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     },
   })
 
@@ -79,6 +85,7 @@ export const fetchPromosByBusinessId = async (
   const response = await fetch(`${BASE_URL}/promotions/business/${businessId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     },
   })
 
@@ -269,6 +276,7 @@ export const getCampaign = async (
   const response = await fetch(`${BASE_URL}/promotions/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     },
 
   })
@@ -284,6 +292,7 @@ export const getAllCampaigns = async (
   const response = await fetch(`${BASE_URL}/promotions/business/${businessId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
     },
 
   })

@@ -100,7 +100,7 @@ export default function Business() {
         setError(business.error)
       } else {
         setBusiness(business)
-        navigate("/dashboard")
+        navigate("/dashboard", { state: { businessId: business.uuid } })
       }
 
     } catch (err: any) {
