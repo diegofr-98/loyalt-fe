@@ -10,10 +10,20 @@ import {
 import { CampaignForm } from "./campaign-form"
 import { type Campaign } from "@/api/types"
 
+type FormData = {
+  name: string
+  startDate: string
+  finishDate: string
+  points: number
+}
+
 type Props = {
   open: boolean
   onOpenChange: (open: boolean) => void
   campaign?: Campaign | null
+  createCampaign: (data: FormData) => Promise<Campaign>
+  updateCampaign: (uuid: string, data: FormData) => Promise<Campaign>
+  loading?: boolean
   onSuccess?: (campaign: Campaign) => void
 }
 
@@ -21,15 +31,34 @@ export function CampaignDialog({
                                  open,
                                  onOpenChange,
                                  campaign,
+                                 createCampaign,
+                                 updateCampaign,
+                                 loading,
                                  onSuccess,
                                }: Props) {
+  const handleSubmit = async (data: FormData) => {
+    try {
+      let result: Campaign
 
-  const handleSuccess = (data: Campaign) => {
-    onSuccess?.(data)
-    onOpenChange(false)
+      if (campaign) {
+        // ✏️ UPDATE
+        result = await updateCampaign(
+          campaign.uuid,
+          data
+        )
+      } else {
+        // ➕ CREATE
+        result = await createCampaign(data)
+      }
+
+      onSuccess?.(result)
+      onOpenChange(false)
+
+    } catch (error) {
+      console.error("Error saving campaign:", error)
+    }
   }
 
-  console.log(campaign, 'campaign dialog')
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[420px]">
@@ -41,8 +70,9 @@ export function CampaignDialog({
         </DialogHeader>
 
         <CampaignForm
-          campaign={campaign}
-          onSubmit={handleSuccess}
+          campaign={campaign ?? undefined}
+          onSubmit={handleSubmit}
+          loading={loading}
         />
 
       </DialogContent>

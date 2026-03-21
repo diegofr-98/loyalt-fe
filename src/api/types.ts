@@ -37,16 +37,16 @@ export type CreateCustomer = {
 }
 
 
+
 export type Campaign = {
-  businessId: string
   name: string
   startDate: string
   finishDate: string
   points: number
   uuid:string
+  businessId?:string
 
 }
-
 export type Reward = {
   uuid: string
   businessId: string

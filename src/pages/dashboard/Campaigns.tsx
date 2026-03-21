@@ -16,7 +16,6 @@ import { type Campaign } from "@/api/types"
 export default function CampaignPage() {
 
     const {
-        campaigns,
         visibleCampaigns,
         totalPages,
         page,
@@ -25,10 +24,10 @@ export default function CampaignPage() {
         setSearch,
         createCampaign,
         updateCampaign,
-        loading
+        loading,
+
     } = useCampaigns()
 
-    console.log(visibleCampaigns)
     const [dialogOpen, setDialogOpen] = useState(false)
     const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null)
 
@@ -79,22 +78,8 @@ export default function CampaignPage() {
                 open={dialogOpen}
                 onOpenChange={setDialogOpen}
                 campaign={selectedCampaign}
-                onSave={async (data) => {
-                    try {
-
-                        if (selectedCampaign) {
-                            await updateCampaign(selectedCampaign.uuid, data)
-                        } else {
-                            await createCampaign(data)
-                        }
-
-                        // ✅ cerrar dialog automáticamente
-                        setDialogOpen(false)
-
-                    } catch (error) {
-                        console.error("Error saving campaign", error)
-                    }
-                }}
+                createCampaign={createCampaign}
+                updateCampaign={updateCampaign}
                 loading={loading}
               />
 

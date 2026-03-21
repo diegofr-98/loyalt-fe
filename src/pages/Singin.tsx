@@ -1,6 +1,6 @@
 
   import { useState } from "react"
-  import { useNavigate, Link } from "react-router-dom"
+  import { Link } from "react-router-dom"
   import { supabase } from "../lib/supabaseClient"
 
   import { Button } from "@/components/ui/button"
@@ -12,8 +12,8 @@
   import { zodResolver } from "@hookform/resolvers/zod"
   import { useForm } from "react-hook-form"
 
-  import { useBusiness } from "@/hooks/useBusiness"
-  import { fetchBusinessByOwnerId } from "@/api/requests"
+
+
 
   const schema = z.object({
     email: z.string().email(),
@@ -23,8 +23,7 @@
   type FormData = z.infer<typeof schema>
 
   export default function Login() {
-    const navigate = useNavigate()
-    const { setBusiness } = useBusiness()
+
 
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
@@ -43,7 +42,7 @@
       setLoading(true)
       setError(null)
 
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
         email: form.email,
         password: form.password,
       })
