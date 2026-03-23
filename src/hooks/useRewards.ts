@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { type Reward } from "@/api/types"
 import {
   createReward,
+  deleteReward,
   fetchRewardsByBusinessId,
   updateReward,
 } from "@/api/requests"
@@ -165,6 +166,31 @@ export const useRewards = () => {
     }
   }
 
+  const handleDeleteReward = async (uuid: string) => {
+    if (!token) {
+      throw new Error("Missing token")
+    }
+
+    try {
+      setLoading(true)
+      setError(null)
+
+      await deleteReward(uuid, token)
+
+      setRewards((prev) => prev.filter((reward) => reward.uuid !== uuid))
+
+      if (currentReward?.uuid === uuid) {
+        setCurrentReward(null)
+      }
+    } catch (err: any) {
+      console.error("Error deleting reward", err)
+      setError(err.message)
+      throw err
+    } finally {
+      setLoading(false)
+    }
+  }
+
   useEffect(() => {
     fetchRewards()
   }, [businessId, token])
@@ -194,5 +220,6 @@ export const useRewards = () => {
     fetchRewards,
     createReward: handleCreateReward,
     updateReward: handleUpdateReward,
+    deleteReward: handleDeleteReward,
   }
 }

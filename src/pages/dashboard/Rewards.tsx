@@ -21,6 +21,7 @@ export default function RewardsPage() {
     setSearch,
     createReward,
     updateReward,
+    deleteReward,
     loading,
   } = useRewards()
 
@@ -36,8 +37,6 @@ export default function RewardsPage() {
     setSelectedReward(reward)
     setDialogOpen(true)
   }
-
-  console.log(visibleRewards, 'visibleRewards')
 
   return (
     <DashboardLayout>
@@ -56,7 +55,12 @@ export default function RewardsPage() {
 
         <Card>
           <CardContent className="p-0">
-            <RewardTable rewards={visibleRewards} onEdit={handleEdit} />
+            <RewardTable
+              rewards={visibleRewards}
+              onEdit={handleEdit}
+              onDelete={(reward) => deleteReward(reward.uuid)}
+              loading={loading}
+            />
           </CardContent>
         </Card>
 

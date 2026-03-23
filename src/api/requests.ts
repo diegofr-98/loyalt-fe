@@ -324,6 +324,36 @@ export const updateReward = async (payload: {
   return response.json()
 }
 
+export const deleteReward = async (
+  id: string,
+  token: string,
+) => {
+  const response = await fetch(`${BASE_URL}/rewards/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+
+  if (!response.ok) {
+    const error = await response.text()
+    throw new Error(error || "Error deleting reward")
+  }
+
+  if (response.status === 204) {
+    return null
+  }
+
+  const text = await response.text()
+
+  if (!text) {
+    return null
+  }
+
+  return JSON.parse(text)
+}
+
 
 export const getCampaign = async (
   id:string,
