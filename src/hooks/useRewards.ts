@@ -9,12 +9,16 @@ import {
 } from "@/api/requests"
 import { useBusiness } from "@/hooks/useBusiness"
 import { useAuth } from "@/hooks/useAuth"
+import { supabase } from "@/lib/supabaseClient"
 
 const ROWS_PER_PAGE = 10
 
 type RewardPayload = {
   name: string
   costPoints: number
+  imgUrl: string
+  imageFile: File | null
+  active: boolean
 }
 
 const normalizeReward = (data: any): Reward => ({
@@ -22,6 +26,8 @@ const normalizeReward = (data: any): Reward => ({
   businessId: data.businessId,
   name: data.name,
   costPoints: data.costPoints,
+  imgUrl: data.imgUrl ?? "",
+  active: data.active ?? true,
 })
 
 export const useRewards = () => {
@@ -59,6 +65,26 @@ export const useRewards = () => {
     }
   }
 
+  const uploadRewardImage = async (imageFile: File | null) => {
+    if (!imageFile) return null
+
+    const fileName = `rewards/${Date.now()}-${imageFile.name}`
+
+    const { error } = await supabase.storage
+      .from("business-logos")
+      .upload(fileName, imageFile)
+
+    if (error) {
+      throw new Error(error.message)
+    }
+
+    const { data } = supabase.storage
+      .from("business-logos")
+      .getPublicUrl(fileName)
+
+    return data.publicUrl
+  }
+
   const handleCreateReward = async (payload: RewardPayload) => {
     if (!businessId || !token) {
       throw new Error("Missing business or token")
@@ -68,10 +94,15 @@ export const useRewards = () => {
       setLoading(true)
       setError(null)
 
+      const uploadedImgUrl =
+        (await uploadRewardImage(payload.imageFile)) || payload.imgUrl
+      const { imageFile, ...restPayload } = payload
+
       const response = await createReward({
         businessId,
         token,
-        ...payload,
+        ...restPayload,
+        imgUrl: uploadedImgUrl,
       })
 
       const newReward = normalizeReward(response)
@@ -100,11 +131,16 @@ export const useRewards = () => {
       setLoading(true)
       setError(null)
 
+      const uploadedImgUrl =
+        (await uploadRewardImage(payload.imageFile)) || payload.imgUrl
+      const { imageFile, ...restPayload } = payload
+
       const response = await updateReward({
         id: uuid,
         businessId,
         token,
-        ...payload,
+        ...restPayload,
+        imgUrl: uploadedImgUrl,
       })
 
       const updatedReward = normalizeReward(response)

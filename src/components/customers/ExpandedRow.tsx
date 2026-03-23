@@ -19,6 +19,7 @@ import {
 
 import { useBusiness } from "@/hooks/useBusiness"
 import { useAuth } from "@/hooks/useAuth"
+import { isPromotionValid } from "@/lib/promotions"
 
 type Props = {
   type: "add" | "subtract"
@@ -31,6 +32,7 @@ type SelectItemType = {
   id: string
   name: string
   points: number
+  disabled?: boolean
 }
 
 export default function ExpandedRow({
@@ -60,8 +62,11 @@ export default function ExpandedRow({
 
           const normalized = promos.map((p: any) => ({
             id: p.uuid,
-            name: p.name,
+            name: isPromotionValid(p)
+              ? p.name
+              : `${p.name} (promocion vencida)`,
             points: p.points,
+            disabled: !isPromotionValid(p),
           }))
 
           setItems(normalized)
@@ -71,11 +76,13 @@ export default function ExpandedRow({
             session.access_token
           )
 
-          const normalized = rewards.map((r: any) => ({
-            id: r.uuid,
-            name: r.name,
-            points: r.costPoints,
-          }))
+          const normalized = rewards
+            .filter((r: any) => r.active)
+            .map((r: any) => ({
+              id: r.uuid,
+              name: r.name,
+              points: r.costPoints,
+            }))
 
           setItems(normalized)
         }
@@ -156,7 +163,7 @@ const handleSubmit = async () => {
 
         <SelectContent>
           {items.map((item) => (
-            <SelectItem key={item.id} value={item.id}>
+            <SelectItem key={item.id} value={item.id} disabled={item.disabled}>
               {item.name}
             </SelectItem>
           ))}

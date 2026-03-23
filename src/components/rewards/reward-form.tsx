@@ -4,10 +4,20 @@ import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { type Reward } from "@/api/types"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 type FormData = {
   name: string
   costPoints: number
+  imgUrl: string
+  imageFile: File | null
+  active: boolean
 }
 
 type Props = {
@@ -19,10 +29,16 @@ type Props = {
 export function RewardForm({ reward, onSubmit, loading }: Props) {
   const [name, setName] = useState(reward?.name ?? "")
   const [costPoints, setCostPoints] = useState<number>(reward?.costPoints ?? 0)
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState(reward?.imgUrl ?? "")
+  const [active, setActive] = useState(reward?.active ?? true)
 
   useEffect(() => {
     setName(reward?.name ?? "")
     setCostPoints(reward?.costPoints ?? 0)
+    setImageFile(null)
+    setImagePreview(reward?.imgUrl ?? "")
+    setActive(reward?.active ?? true)
   }, [reward])
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -33,6 +49,9 @@ export function RewardForm({ reward, onSubmit, loading }: Props) {
     onSubmit({
       name,
       costPoints,
+      imgUrl: reward?.imgUrl ?? "",
+      imageFile,
+      active,
     })
   }
 
@@ -45,11 +64,48 @@ export function RewardForm({ reward, onSubmit, loading }: Props) {
       />
 
       <Input
-        type="number"
+        type="text"
+        inputMode="numeric"
         placeholder="Costo en puntos"
-        value={costPoints}
-        onChange={(e) => setCostPoints(Number(e.target.value))}
+        value={costPoints === 0 ? "" : costPoints}
+        onChange={(e) => {
+          const value = e.target.value.replace(/\D/g, "")
+          setCostPoints(value ? Number(value) : 0)
+        }}
       />
+
+      <Input
+        type="file"
+        accept="image/*"
+        onChange={(e) => {
+          const file = e.target.files?.[0] ?? null
+
+          setImageFile(file)
+          setImagePreview(file ? URL.createObjectURL(file) : reward?.imgUrl ?? "")
+        }}
+      />
+
+      {imagePreview && (
+        <img
+          src={imagePreview}
+          alt="Preview de recompensa"
+          className="h-24 w-24 rounded-md object-cover"
+        />
+      )}
+
+      <Select
+        value={active ? "true" : "false"}
+        onValueChange={(value) => setActive(value === "true")}
+      >
+        <SelectTrigger>
+          <SelectValue placeholder="Estado de la recompensa" />
+        </SelectTrigger>
+
+        <SelectContent>
+          <SelectItem value="true">Activo</SelectItem>
+          <SelectItem value="false">Inactivo</SelectItem>
+        </SelectContent>
+      </Select>
 
       <Button type="submit" className="w-full" disabled={loading}>
         {loading ? "Guardando..." : "Guardar recompensa"}

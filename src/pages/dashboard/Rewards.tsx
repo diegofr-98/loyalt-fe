@@ -37,6 +37,8 @@ export default function RewardsPage() {
     setDialogOpen(true)
   }
 
+  console.log(visibleRewards, 'visibleRewards')
+
   return (
     <DashboardLayout>
       <div className="p-8 space-y-8">

@@ -269,6 +269,8 @@ export const createReward = async (payload: {
   businessId: string
   name: string
   costPoints: number
+  imgUrl: string
+  active: boolean
   token: string
 }) => {
 
@@ -297,6 +299,8 @@ export const updateReward = async (payload: {
   businessId: string
   name: string
   costPoints: number
+  imgUrl: string
+  active: boolean
   token: string
 
   }) => {

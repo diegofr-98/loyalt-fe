@@ -12,6 +12,9 @@ import { RewardForm } from "./reward-form"
 type FormData = {
   name: string
   costPoints: number
+  imgUrl: string
+  imageFile: File | null
+  active: boolean
 }
 
 type Props = {
