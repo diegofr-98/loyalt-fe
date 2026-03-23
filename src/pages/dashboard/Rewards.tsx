@@ -2,48 +2,43 @@
 
 import { useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
-
-import { useCampaigns } from "@/hooks/useCampaigns"
-
-import { CampaignHeader } from "@/components/campaigns/campaign-header"
-import { CampaignTable } from "@/components/campaigns/campaign-table"
-import { CampaignPagination } from "@/components/campaigns/campaign-pagination"
-import { CampaignDialog } from "@/components/campaigns/campaign-dialog"
 import DashboardLayout from "@/layouts/DashboardLayout"
 import { SidebarTrigger } from "@/components/ui/sidebar"
-import { type Campaign } from "@/api/types"
+import { type Reward } from "@/api/types"
+import { useRewards } from "@/hooks/useRewards"
+import { RewardHeader } from "@/components/rewards/reward-header"
+import { RewardTable } from "@/components/rewards/reward-table"
+import { RewardPagination } from "@/components/rewards/reward-pagination"
+import { RewardDialog } from "@/components/rewards/reward-dialog"
 
 export default function RewardsPage() {
-
   const {
-    visibleCampaigns,
+    visibleRewards,
     totalPages,
     page,
     setPage,
     search,
     setSearch,
-    createCampaign,
-    updateCampaign,
+    createReward,
+    updateReward,
     loading,
-
-  } = useCampaigns()
+  } = useRewards()
 
   const [dialogOpen, setDialogOpen] = useState(false)
-  const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null)
+  const [selectedReward, setSelectedReward] = useState<Reward | null>(null)
 
   const handleCreate = () => {
-    setSelectedCampaign(null)
+    setSelectedReward(null)
     setDialogOpen(true)
   }
 
-  const handleEdit = (campaign: Campaign) => {
-    setSelectedCampaign(campaign)
+  const handleEdit = (reward: Reward) => {
+    setSelectedReward(reward)
     setDialogOpen(true)
   }
 
   return (
     <DashboardLayout>
-
       <div className="p-8 space-y-8">
         <div className="flex items-center gap-4">
           <SidebarTrigger />
@@ -51,8 +46,7 @@ export default function RewardsPage() {
       </div>
 
       <div className="p-8 space-y-6">
-
-        <CampaignHeader
+        <RewardHeader
           search={search}
           setSearch={setSearch}
           onCreate={handleCreate}
@@ -60,31 +54,25 @@ export default function RewardsPage() {
 
         <Card>
           <CardContent className="p-0">
-            <CampaignTable
-              campaigns={visibleCampaigns}
-              onEdit={handleEdit}
-            />
+            <RewardTable rewards={visibleRewards} onEdit={handleEdit} />
           </CardContent>
         </Card>
 
-        <CampaignPagination
+        <RewardPagination
           page={page}
           totalPages={totalPages}
           setPage={setPage}
         />
 
-        {/* ✅ DIALOG conectado al backend */}
-        <CampaignDialog
+        <RewardDialog
           open={dialogOpen}
           onOpenChange={setDialogOpen}
-          campaign={selectedCampaign}
-          createCampaign={createCampaign}
-          updateCampaign={updateCampaign}
+          reward={selectedReward}
+          createReward={createReward}
+          updateReward={updateReward}
           loading={loading}
         />
-
       </div>
-
     </DashboardLayout>
   )
 }
