@@ -28,32 +28,22 @@ type Props = {
 }
 
 export function CampaignDialog({
-                                 open,
-                                 onOpenChange,
-                                 campaign,
-                                 createCampaign,
-                                 updateCampaign,
-                                 loading,
-                                 onSuccess,
-                               }: Props) {
+  open,
+  onOpenChange,
+  campaign,
+  createCampaign,
+  updateCampaign,
+  loading,
+  onSuccess,
+}: Props) {
   const handleSubmit = async (data: FormData) => {
     try {
-      let result: Campaign
-
-      if (campaign) {
-        // ✏️ UPDATE
-        result = await updateCampaign(
-          campaign.uuid,
-          data
-        )
-      } else {
-        // ➕ CREATE
-        result = await createCampaign(data)
-      }
+      const result = campaign
+        ? await updateCampaign(campaign.uuid, data)
+        : await createCampaign(data)
 
       onSuccess?.(result)
       onOpenChange(false)
-
     } catch (error) {
       console.error("Error saving campaign:", error)
     }
@@ -62,10 +52,9 @@ export function CampaignDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[420px]">
-
         <DialogHeader>
           <DialogTitle>
-            {campaign ? "Editar campaña" : "Nueva campaña"}
+            {campaign ? "Edit campaign" : "New campaign"}
           </DialogTitle>
         </DialogHeader>
 
@@ -74,7 +63,6 @@ export function CampaignDialog({
           onSubmit={handleSubmit}
           loading={loading}
         />
-
       </DialogContent>
     </Dialog>
   )

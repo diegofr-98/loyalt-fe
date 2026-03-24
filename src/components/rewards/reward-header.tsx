@@ -15,7 +15,7 @@ export function RewardHeader({ search, setSearch, onCreate }: Props) {
         <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
 
         <Input
-          placeholder="Buscar recompensa..."
+          placeholder="Search reward..."
           className="pl-8"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -24,7 +24,7 @@ export function RewardHeader({ search, setSearch, onCreate }: Props) {
 
       <Button onClick={onCreate}>
         <Plus className="mr-2 h-4 w-4" />
-        Nueva recompensa
+        New reward
       </Button>
     </div>
   )

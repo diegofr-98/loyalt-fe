@@ -2,6 +2,8 @@ import {
   LayoutDashboard,
   LogOut,
   Megaphone,
+  QrCode,
+  Gift,
   Users,
 } from "lucide-react"
 
@@ -81,14 +83,14 @@ export function AppSidebar({ name }: { name: string }) {
 
               <SidebarMenuItem>
                 <SidebarMenuButton onClick={() => navigate("/rewards")}>
-                  <Megaphone size={18} />
+                  <Gift size={18} />
                   Rewards
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
               <SidebarMenuItem>
                 <SidebarMenuButton onClick={() => navigate("/qr")}>
-                  <Megaphone size={18} />
+                  <QrCode size={18} />
                   QR
                 </SidebarMenuButton>
               </SidebarMenuItem>

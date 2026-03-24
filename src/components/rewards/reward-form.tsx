@@ -58,7 +58,7 @@ export function RewardForm({ reward, onSubmit, loading }: Props) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <Input
-        placeholder="Nombre de recompensa"
+        placeholder="Reward name"
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
@@ -66,7 +66,7 @@ export function RewardForm({ reward, onSubmit, loading }: Props) {
       <Input
         type="text"
         inputMode="numeric"
-        placeholder="Costo en puntos"
+        placeholder="Points cost"
         value={costPoints === 0 ? "" : costPoints}
         onChange={(e) => {
           const value = e.target.value.replace(/\D/g, "")
@@ -88,7 +88,7 @@ export function RewardForm({ reward, onSubmit, loading }: Props) {
       {imagePreview && (
         <img
           src={imagePreview}
-          alt="Preview de recompensa"
+          alt="Reward preview"
           className="h-24 w-24 rounded-md object-cover"
         />
       )}
@@ -98,17 +98,17 @@ export function RewardForm({ reward, onSubmit, loading }: Props) {
         onValueChange={(value) => setActive(value === "true")}
       >
         <SelectTrigger>
-          <SelectValue placeholder="Estado de la recompensa" />
+          <SelectValue placeholder="Reward status" />
         </SelectTrigger>
 
         <SelectContent>
-          <SelectItem value="true">Activo</SelectItem>
-          <SelectItem value="false">Inactivo</SelectItem>
+          <SelectItem value="true">Active</SelectItem>
+          <SelectItem value="false">Inactive</SelectItem>
         </SelectContent>
       </Select>
 
       <Button type="submit" className="w-full" disabled={loading}>
-        {loading ? "Guardando..." : "Guardar recompensa"}
+        {loading ? "Saving..." : "Save reward"}
       </Button>
     </form>
   )

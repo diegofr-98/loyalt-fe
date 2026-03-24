@@ -26,7 +26,7 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
   const { open } = useSidebar()
   const { business } = useBusiness()
 
-  const name = business?.name ?? "Usuario"
+  const name = business?.name ?? "User"
 
   return (
     <div className="flex min-h-screen w-full">

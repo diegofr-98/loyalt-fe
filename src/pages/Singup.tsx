@@ -52,29 +52,26 @@ export default function Register() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted/40 px-4">
       <Card className="w-full max-w-md">
-
         <CardHeader>
-          <CardTitle>Crear cuenta</CardTitle>
+          <CardTitle>Create account</CardTitle>
           <CardDescription>
-            Regístrate para empezar
+            Sign up to get started
           </CardDescription>
         </CardHeader>
 
         <CardContent>
-
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-
-            <Label htmlFor="email">Correo</Label>
+            <Label htmlFor="email">Email</Label>
             <Input
               type="email"
-              placeholder="Correo electrónico"
+              placeholder="Email address"
               {...register("email")}
             />
 
-            <Label htmlFor="password">Contraseña</Label>
+            <Label htmlFor="password">Password</Label>
             <Input
               type="password"
-              placeholder="Contraseña"
+              placeholder="Password"
               {...register("password")}
             />
 
@@ -82,22 +79,20 @@ export default function Register() {
               className="w-full"
               disabled={!isValid || loading}
             >
-              {loading ? "Registrando..." : "Continuar"}
+              {loading ? "Creating account..." : "Continue"}
             </Button>
-
           </form>
 
           {error && (
-            <p className="text-sm text-red-500 mt-4">{error}</p>
+            <p className="mt-4 text-sm text-red-500">{error}</p>
           )}
 
-          <p className="text-sm text-muted-foreground mt-6 text-center">
-            ¿Ya tienes cuenta?{" "}
+          <p className="mt-6 text-center text-sm text-muted-foreground">
+            Already have an account?{" "}
             <Link to="/signin" className="text-primary hover:underline">
-              Inicia sesión
+              Sign in
             </Link>
           </p>
-
         </CardContent>
       </Card>
     </div>

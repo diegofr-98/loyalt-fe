@@ -56,7 +56,7 @@ export default function Settings() {
             <div className="flex flex-col items-center gap-3 text-center">
               <Spinner className="size-8" />
               <p className="text-sm text-muted-foreground">
-                Cargando configuracion del negocio...
+                Loading business settings...
               </p>
             </div>
           </div>
@@ -67,11 +67,10 @@ export default function Settings() {
             <div className="inline-flex flex-col gap-5 rounded-2xl border bg-white p-6 shadow-sm">
               <div className="space-y-1">
                 <p className="max-w-[320px] text-2xl font-semibold tracking-tight">
-                  !ESCANEA Y UNETE!
+                  SCAN AND JOIN!
                 </p>
                 <p className="max-w-[320px] text-sm text-muted-foreground">
-                  Acumula puntos en cada compra y canjea por regalos
-                  exclusivos.
+                  Earn points with every purchase and redeem them for exclusive rewards.
                 </p>
               </div>
 
@@ -89,19 +88,19 @@ export default function Settings() {
               <div className="flex flex-col gap-3 sm:flex-row">
                 <Button type="button" onClick={handleDownloadQr}>
                   <DownloadIcon />
-                  Descargar QR
+                  Download QR
                 </Button>
 
                 <Button asChild variant="outline">
                   <a href={customerUrl} target="_blank" rel="noreferrer">
                     <ExternalLinkIcon />
-                    Ir al link
+                    Open link
                   </a>
                 </Button>
               </div>
 
               <p className="max-w-[320px] text-xs text-muted-foreground">
-                Este es el Banner Fisico que veria el cliente en tu tienda.
+                This is the physical banner your customer would see in your store.
               </p>
             </div>
           </div>
@@ -113,9 +112,8 @@ export default function Settings() {
               <EmptyHeader>
                 <Button variant="outline" disabled size="sm">
                   <Spinner data-icon="inline-start" />
-                  
                 </Button>
-                <EmptyTitle>Por favor espera unos segundos</EmptyTitle>
+                <EmptyTitle>Please wait a few seconds</EmptyTitle>
               </EmptyHeader>
             </Empty>
           </div>

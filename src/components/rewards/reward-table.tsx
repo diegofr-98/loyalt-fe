@@ -31,11 +31,11 @@ export function RewardTable({ rewards, onEdit, onDelete, loading }: Props) {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Imagen</TableHead>
-          <TableHead>Nombre</TableHead>
-          <TableHead>Costo en puntos</TableHead>
+          <TableHead>Image</TableHead>
+          <TableHead>Name</TableHead>
+          <TableHead>Points cost</TableHead>
           <TableHead>Status</TableHead>
-          <TableHead className="text-right">Acciones</TableHead>
+          <TableHead className="text-right">Actions</TableHead>
         </TableRow>
       </TableHeader>
 
@@ -52,7 +52,7 @@ export function RewardTable({ rewards, onEdit, onDelete, loading }: Props) {
             </TableCell>
             <TableCell>{reward.name}</TableCell>
             <TableCell>{reward.costPoints}</TableCell>
-            <TableCell>{reward.active ? "Activo" : "Inactivo"}</TableCell>
+            <TableCell>{reward.active ? "Active" : "Inactive"}</TableCell>
             <TableCell className="text-right">
               <div className="flex justify-end gap-1">
                 <Button

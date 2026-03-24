@@ -64,7 +64,7 @@ export default function ExpandedRow({
             id: p.uuid,
             name: isPromotionValid(p)
               ? p.name
-              : `${p.name} (promocion vencida)`,
+              : `${p.name} (expired promotion)`,
             points: p.points,
             disabled: !isPromotionValid(p),
           }))
@@ -101,62 +101,60 @@ export default function ExpandedRow({
     setPoints(item?.points ?? 0)
   }
 
-const handleSubmit = async () => {
-  if (!business.uuid || !session?.access_token || !selectedId) return
+  const handleSubmit = async () => {
+    if (!business.uuid || !session?.access_token || !selectedId) return
 
-  try {
-    setLoading(true)
+    try {
+      setLoading(true)
 
-    if (type === "add") {
-      await createTransaction(
-        business.uuid,
-        customerId,
-        points,
-        session.access_token
+      if (type === "add") {
+        await createTransaction(
+          business.uuid,
+          customerId,
+          points,
+          session.access_token
+        )
+
+        onPointsChange(customerId, points)
+
+        toast.success("Points added successfully")
+      } else {
+        await createRedemption(
+          business.uuid,
+          customerId,
+          selectedId,
+          points,
+          session.access_token
+        )
+
+        onPointsChange(customerId, -points)
+
+        toast.success("Reward redeemed successfully")
+      }
+
+      onClose()
+    } catch (err) {
+      console.error(err)
+
+      toast.error(
+        type === "add"
+          ? "Could not add points"
+          : "Could not redeem reward"
       )
-
-      onPointsChange(customerId, points)
-
-      toast.success("Puntos añadidos correctamente")
-    } else {
-      await createRedemption(
-        business.uuid,
-        customerId,
-        selectedId,
-        points,
-        session.access_token
-      )
-
-      onPointsChange(customerId, -points)
-
-      toast.success("Recompensa canjeada correctamente")
+    } finally {
+      setLoading(false)
     }
-
-    onClose()
-
-  } catch (err) {
-    console.error(err)
-
-    toast.error(
-      type === "add"
-        ? "No se pudieron añadir los puntos"
-        : "No se pudo canjear la recompensa"
-    )
-
-  } finally {
-    setLoading(false)
   }
-}
 
   return (
-    <div className="flex items-center gap-4 p-4 bg-muted/40 rounded">
+    <div className="flex items-center gap-4 rounded bg-muted/40 p-4">
       <Select onValueChange={handleSelect}>
         <SelectTrigger className="w-[220px]">
           <SelectValue
             placeholder={
               type === "add"
-                ? "Seleccionar promoción"
-                : "Seleccionar recompensa"
+                ? "Select promotion"
+                : "Select reward"
             }
           />
         </SelectTrigger>
@@ -181,10 +179,10 @@ const handleSubmit = async () => {
         onClick={handleSubmit}
       >
         {loading
-          ? "Procesando..."
+          ? "Processing..."
           : type === "add"
-          ? "Añadir puntos"
-          : "Restar puntos"}
+            ? "Add points"
+            : "Subtract points"}
       </Button>
     </div>
   )

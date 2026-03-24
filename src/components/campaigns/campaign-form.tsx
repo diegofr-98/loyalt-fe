@@ -19,7 +19,6 @@ type Props = {
 }
 
 export function CampaignForm({ campaign, onSubmit, loading }: Props) {
-
   const [name, setName] = useState(campaign?.name ?? "")
   const [points, setPoints] = useState<number>(campaign?.points ?? 0)
   const [startDate, setStartDate] = useState(campaign?.startDate ?? "")
@@ -32,31 +31,25 @@ export function CampaignForm({ campaign, onSubmit, loading }: Props) {
     setFinishDate(campaign?.finishDate ? campaign.finishDate.slice(0, 10) : "")
   }, [campaign])
 
-  const formatDate = (date: string) => {
-    return new Date(date).toISOString()
-  }
+  const formatDate = (date: string) => new Date(date).toISOString()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    // 🔥 validación básica
     if (!name || !startDate || !finishDate) return
 
-    const payload: FormData = {
+    onSubmit({
       name,
       startDate: formatDate(startDate),
       finishDate: formatDate(finishDate),
       points,
-    }
-
-    onSubmit(payload) // ✅ limpio, sin undefined
+    })
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-
       <Input
-        placeholder="Nombre de campaña"
+        placeholder="Campaign name"
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
@@ -64,7 +57,7 @@ export function CampaignForm({ campaign, onSubmit, loading }: Props) {
       <Input
         type="text"
         inputMode="numeric"
-        placeholder="Puntos"
+        placeholder="Points"
         value={points === 0 ? "" : points}
         onChange={(e) => {
           const value = e.target.value.replace(/\D/g, "")
@@ -89,9 +82,8 @@ export function CampaignForm({ campaign, onSubmit, loading }: Props) {
         className="w-full"
         disabled={loading}
       >
-        {loading ? "Guardando..." : "Guardar campaña"}
+        {loading ? "Saving..." : "Save campaign"}
       </Button>
-
     </form>
   )
 }

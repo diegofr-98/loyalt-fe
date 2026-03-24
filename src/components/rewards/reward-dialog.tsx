@@ -58,7 +58,7 @@ export function RewardDialog({
       <DialogContent className="sm:max-w-[420px]">
         <DialogHeader>
           <DialogTitle>
-            {reward ? "Editar recompensa" : "Nueva recompensa"}
+            {reward ? "Edit reward" : "New reward"}
           </DialogTitle>
         </DialogHeader>
 

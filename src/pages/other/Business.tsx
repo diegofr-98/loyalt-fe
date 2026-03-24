@@ -12,8 +12,8 @@ import { createBusiness } from "@/api/requests"
 import { useBusiness } from "@/hooks/useBusiness"
 
 const schema = z.object({
-  businessName: z.string().min(1, "Nombre requerido"),
-  businessTypeId: z.string().min(1, "Tipo requerido"),
+  businessName: z.string().min(1, "Business name is required"),
+  businessTypeId: z.string().min(1, "Business type is required"),
 })
 
 type FormData = z.infer<typeof schema>
@@ -74,7 +74,6 @@ export default function Business() {
     setError(null)
 
     try {
-
       const logoUrl = await uploadLogo()
 
       const {
@@ -102,7 +101,6 @@ export default function Business() {
         setBusiness(business)
         navigate("/dashboard", { state: { businessId: business.uuid } })
       }
-
     } catch (err: any) {
       setError(err.message)
     }
@@ -113,20 +111,17 @@ export default function Business() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted/40 px-4">
       <Card className="w-full max-w-md">
-
         <CardHeader>
-          <CardTitle>Configura tu negocio</CardTitle>
+          <CardTitle>Set up your business</CardTitle>
           <CardDescription>
-            Solo toma unos segundos
+            It only takes a few seconds
           </CardDescription>
         </CardHeader>
 
         <CardContent>
-
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-
             <Input
-              placeholder="Nombre del negocio"
+              placeholder="Business name"
               {...register("businessName")}
             />
 
@@ -136,7 +131,7 @@ export default function Business() {
               }
             >
               <SelectTrigger>
-                <SelectValue placeholder="Tipo de negocio" />
+                <SelectValue placeholder="Business type" />
               </SelectTrigger>
 
               <SelectContent>
@@ -171,15 +166,13 @@ export default function Business() {
               className="w-full"
               disabled={!isValid || !logoFile || loading}
             >
-              {loading ? "Creando negocio..." : "Continuar"}
+              {loading ? "Creating business..." : "Continue"}
             </Button>
-
           </form>
 
           {error && (
-            <p className="text-sm text-red-500 mt-4">{error}</p>
+            <p className="mt-4 text-sm text-red-500">{error}</p>
           )}
-
         </CardContent>
       </Card>
     </div>

@@ -44,7 +44,7 @@ import ExpandedRow from "./ExpandedRow"
 export const formatDate = (dateString: string) => {
   const date = new Date(dateString)
 
-  return new Intl.DateTimeFormat("es-ES", {
+  return new Intl.DateTimeFormat("en-US", {
     day: "2-digit",
     month: "short",
     year: "numeric",
@@ -88,9 +88,9 @@ export function DataTable<
       prev.map((customer) =>
         customer.customerId === customerId
           ? {
-              ...customer,
-              points: (customer.points ?? 0) + delta,
-            }
+            ...customer,
+            points: (customer.points ?? 0) + delta,
+          }
           : customer
       )
     )
@@ -119,7 +119,7 @@ export function DataTable<
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <Input
-          placeholder="Buscar por ID..."
+          placeholder="Search by ID..."
           value={
             (table.getColumn("customerId")?.getFilterValue() as string) ?? ""
           }
@@ -131,7 +131,7 @@ export function DataTable<
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline">Columnas</Button>
+            <Button variant="outline">Columns</Button>
           </DropdownMenuTrigger>
 
           <DropdownMenuContent align="end">
@@ -170,8 +170,8 @@ export function DataTable<
                     )}
 
                     {{
-                      asc: " ðŸ”¼",
-                      desc: " ðŸ”½",
+                      asc: " ↑",
+                      desc: " ↓",
                     }[header.column.getIsSorted() as string] ?? null}
                   </TableHead>
                 ))}

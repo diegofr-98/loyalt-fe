@@ -22,20 +22,20 @@ const setBadgeType = (badgeType: BadgeType): any => {
   }
 }
 
-export function PointsLedgerTable({activity}: {activity: any}) {
+export function PointsLedgerTable({ activity }: { activity: any }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Actividad reciente</CardTitle>
+        <CardTitle>Recent activity</CardTitle>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">ID</TableHead>
-              <TableHead >ID Cliente</TableHead>
-              <TableHead>Tipo</TableHead>
-              <TableHead>Puntos</TableHead>
+              <TableHead>Customer ID</TableHead>
+              <TableHead>Type</TableHead>
+              <TableHead>Points</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -43,7 +43,11 @@ export function PointsLedgerTable({activity}: {activity: any}) {
               <TableRow key={ledger.uuid}>
                 <TableCell className="font-medium">{ledger.uuid}</TableCell>
                 <TableCell>{ledger.customer_id}</TableCell>
-                <TableCell><Badge variant={setBadgeType(ledger.type as BadgeType)}>{ledger.type}</Badge></TableCell>
+                <TableCell>
+                  <Badge variant={setBadgeType(ledger.type as BadgeType)}>
+                    {ledger.type}
+                  </Badge>
+                </TableCell>
                 <TableCell>{ledger.points}</TableCell>
               </TableRow>
             ))}

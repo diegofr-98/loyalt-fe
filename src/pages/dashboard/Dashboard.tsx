@@ -99,7 +99,7 @@ export default function Dashboard() {
           <div>
             <h1 className="text-3xl font-bold">Dashboard</h1>
             <p className="text-muted-foreground">
-              Bienvenido de nuevo
+              Welcome back
             </p>
           </div>
         </div>
@@ -110,7 +110,7 @@ export default function Dashboard() {
             <CardHeader>
               <div className="flex flex-col-2 gap-2 items-center">
                 <Users size={28} className="text-blue-500" />
-                <CardTitle>Usuarios activos</CardTitle>
+                <CardTitle>Active users</CardTitle>
               </div>
               <CardDescription className="text-2xl font-bold text-black">
                 {customersAnalytics?.activeUsers ?? 0}
@@ -122,7 +122,7 @@ export default function Dashboard() {
             <CardHeader>
               <div className="flex flex-col-2 gap-2 items-center">
                 <TrendingUp size={28} className="text-green-500" />
-                <CardTitle>Puntos emitidos</CardTitle>
+                <CardTitle>Points issued</CardTitle>
               </div>
               <CardDescription className="text-2xl font-bold text-black">
                 {emmitedPoints}
@@ -134,7 +134,7 @@ export default function Dashboard() {
             <CardHeader>
               <div className="flex flex-col-2 gap-2 items-center">
                 <ShoppingBag size={28} className="text-red-500" />
-                <CardTitle>Canjeos totales</CardTitle>
+                <CardTitle>Total redemptions</CardTitle>
               </div>
               <CardDescription className="text-2xl font-bold text-black">
                 {totalRedeemptions}
@@ -146,7 +146,7 @@ export default function Dashboard() {
             <CardHeader>
               <div className="flex flex-col-2 gap-2 items-center">
                 <CreditCard size={28} className="text-yellow-500" />
-                <CardTitle>Tasa de canjeo</CardTitle>
+                <CardTitle>Redemption rate</CardTitle>
               </div>
               <CardDescription className="text-2xl font-bold text-black">
                 {redemptionRate}

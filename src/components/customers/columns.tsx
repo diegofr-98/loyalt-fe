@@ -16,31 +16,29 @@ export const columns: ColumnDef<Customer>[] = [
   },
   {
     accessorKey: "phone",
-    header: "Teléfono",
+    header: "Phone",
   },
   {
     accessorKey: "points",
-    header: "Puntos",
+    header: "Points",
   },
   {
     accessorKey: "googleObjectId",
-    header: "ID Google",
+    header: "Google ID",
   },
   {
     accessorKey: "createdAt",
-    header: "Fecha",
-    cell: ({ row }) => formatDate(row.getValue("createdAt"))
+    header: "Date",
+    cell: ({ row }) => formatDate(row.getValue("createdAt")),
   },
   {
     id: "actions",
     header: "",
     cell: ({ row, table }) => {
-
       const setExpandedRow = (table.options.meta as any)?.setExpandedRow
 
       return (
         <DropdownMenu>
-
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon">
               <MoreHorizontal className="h-4 w-4" />
@@ -48,7 +46,6 @@ export const columns: ColumnDef<Customer>[] = [
           </DropdownMenuTrigger>
 
           <DropdownMenuContent align="end">
-
             <DropdownMenuItem
               onClick={() =>
                 setExpandedRow({
@@ -57,7 +54,7 @@ export const columns: ColumnDef<Customer>[] = [
                 })
               }
             >
-              Añadir puntos
+              Add points
             </DropdownMenuItem>
 
             <DropdownMenuItem
@@ -68,11 +65,9 @@ export const columns: ColumnDef<Customer>[] = [
                 })
               }
             >
-              Restar puntos
+              Subtract points
             </DropdownMenuItem>
-
           </DropdownMenuContent>
-
         </DropdownMenu>
       )
     },
