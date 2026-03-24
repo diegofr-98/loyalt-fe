@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@200..1000&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -150,5 +151,6 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family: "Nunito Sans", sans-serif;
   }
 }
