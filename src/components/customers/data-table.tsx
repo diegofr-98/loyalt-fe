@@ -1,18 +1,18 @@
 "use client"
 
-import { Fragment, useState, useEffect } from "react"
+import { Fragment, useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import {
   flexRender,
   getCoreRowModel,
-  getSortedRowModel,
   getFilteredRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
 import type {
   ColumnDef,
-  SortingState,
   ColumnFiltersState,
+  SortingState,
   VisibilityState,
 } from "@tanstack/react-table"
 
@@ -32,6 +32,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+} from "@/components/ui/pagination"
 
 import ExpandedRow from "./ExpandedRow"
 
@@ -53,14 +59,16 @@ interface DataTableProps<TData, TValue> {
   onPageChange: (page: number) => void
 }
 
-export function DataTable<TData extends { customerId: string; points?: number }, TValue>({
+export function DataTable<
+  TData extends { customerId: string; points?: number },
+  TValue,
+>({
   columns,
   data,
   page,
   totalPages,
   onPageChange,
 }: DataTableProps<TData, TValue>) {
-
   const [tableData, setTableData] = useState<TData[]>(data)
 
   useEffect(() => {
@@ -68,10 +76,8 @@ export function DataTable<TData extends { customerId: string; points?: number },
   }, [data])
 
   const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] =
-    useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] =
-    useState<VisibilityState>({})
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [expandedRow, setExpandedRow] = useState<{
     rowId: string
     type: "add" | "subtract"
@@ -111,14 +117,12 @@ export function DataTable<TData extends { customerId: string; points?: number },
 
   return (
     <div className="space-y-4">
-
-      {/* SEARCH + COLUMN VISIBILITY */}
-
       <div className="flex items-center justify-between">
-
         <Input
           placeholder="Buscar por ID..."
-          value={(table.getColumn("customerId")?.getFilterValue() as string) ?? ""}
+          value={
+            (table.getColumn("customerId")?.getFilterValue() as string) ?? ""
+          }
           onChange={(event) =>
             table.getColumn("customerId")?.setFilterValue(event.target.value)
           }
@@ -127,9 +131,7 @@ export function DataTable<TData extends { customerId: string; points?: number },
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline">
-              Columnas
-            </Button>
+            <Button variant="outline">Columnas</Button>
           </DropdownMenuTrigger>
 
           <DropdownMenuContent align="end">
@@ -149,14 +151,10 @@ export function DataTable<TData extends { customerId: string; points?: number },
               ))}
           </DropdownMenuContent>
         </DropdownMenu>
-
       </div>
-
-      {/* TABLE */}
 
       <div className="rounded-md border">
         <Table>
-
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -172,8 +170,8 @@ export function DataTable<TData extends { customerId: string; points?: number },
                     )}
 
                     {{
-                      asc: " 🔼",
-                      desc: " 🔽",
+                      asc: " ðŸ”¼",
+                      desc: " ðŸ”½",
                     }[header.column.getIsSorted() as string] ?? null}
                   </TableHead>
                 ))}
@@ -184,7 +182,6 @@ export function DataTable<TData extends { customerId: string; points?: number },
           <TableBody>
             {table.getRowModel().rows.map((row) => (
               <Fragment key={row.id}>
-
                 <TableRow>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -216,42 +213,28 @@ export function DataTable<TData extends { customerId: string; points?: number },
                     </TableCell>
                   </TableRow>
                 )}
-
               </Fragment>
             ))}
           </TableBody>
-
         </Table>
       </div>
 
-      {/* PAGINATION */}
-
-      <div className="flex items-center justify-end gap-2">
-
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => onPageChange(page - 1)}
-          disabled={page === 0}
-        >
-          Anterior
-        </Button>
-
-        <span className="text-sm">
-          Página {page + 1} de {totalPages}
-        </span>
-
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => onPageChange(page + 1)}
-          disabled={page + 1 >= totalPages}
-        >
-          Siguiente
-        </Button>
-
-      </div>
-
+      {totalPages > 1 && (
+        <Pagination>
+          <PaginationContent>
+            {Array.from({ length: totalPages }).map((_, i) => (
+              <PaginationItem key={i}>
+                <PaginationLink
+                  isActive={page === i}
+                  onClick={() => onPageChange(i)}
+                >
+                  {i + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+          </PaginationContent>
+        </Pagination>
+      )}
     </div>
   )
 }

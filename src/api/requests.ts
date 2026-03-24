@@ -218,8 +218,6 @@ export const createCampaign = async (payload: {
 
   const { token, ...body } = payload
 
-  console.log(token, 'token')
-  console.log(body, 'body')
   const response = await fetch(`${BASE_URL}/promotions`, {
     method: "POST",
     headers: {
@@ -250,8 +248,6 @@ export const updateCampaign = async (payload: {
 
   const {id, token, ...body } = payload
 
-  console.log(payload, 'payload')
-
   const response = await fetch(`${BASE_URL}/promotions/${id}`, {
     method: "PUT",
     headers: {
@@ -268,6 +264,96 @@ export const updateCampaign = async (payload: {
 
   return response.json()
 }
+
+export const createReward = async (payload: {
+  businessId: string
+  name: string
+  costPoints: number
+  imgUrl: string
+  active: boolean
+  token: string
+}) => {
+
+  const { token, ...body } = payload
+
+  const response = await fetch(`${BASE_URL}/rewards`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(body),
+  })
+
+  if (!response.ok) {
+    const error = await response.text()
+    throw new Error(error || "Error creating campaign")
+  }
+
+  return response.json()
+}
+
+
+export const updateReward = async (payload: {
+  id:string
+  businessId: string
+  name: string
+  costPoints: number
+  imgUrl: string
+  active: boolean
+  token: string
+
+  }) => {
+
+  const {id, token, ...body } = payload
+
+  const response = await fetch(`${BASE_URL}/rewards/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(body),
+  })
+
+  if (!response.ok) {
+    const error = await response.text()
+    throw new Error(error || "Error creating campaign")
+  }
+
+  return response.json()
+}
+
+export const deleteReward = async (
+  id: string,
+  token: string,
+) => {
+  const response = await fetch(`${BASE_URL}/rewards/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+
+  if (!response.ok) {
+    const error = await response.text()
+    throw new Error(error || "Error deleting reward")
+  }
+
+  if (response.status === 204) {
+    return null
+  }
+
+  const text = await response.text()
+
+  if (!text) {
+    return null
+  }
+
+  return JSON.parse(text)
+}
+
 
 export const getCampaign = async (
   id:string,

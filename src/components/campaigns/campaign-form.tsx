@@ -62,10 +62,14 @@ export function CampaignForm({ campaign, onSubmit, loading }: Props) {
       />
 
       <Input
-        type="number"
+        type="text"
+        inputMode="numeric"
         placeholder="Puntos"
-        value={points}
-        onChange={(e) => setPoints(Number(e.target.value))}
+        value={points === 0 ? "" : points}
+        onChange={(e) => {
+          const value = e.target.value.replace(/\D/g, "")
+          setPoints(value ? Number(value) : 0)
+        }}
       />
 
       <Input

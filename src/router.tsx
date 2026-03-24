@@ -7,6 +7,7 @@ import Dashboard from "@/pages/dashboard/Dashboard"
 import Customers from "@/pages/dashboard/Customers"
 import Campaigns from "@/pages/dashboard/Campaigns"
 import Settings from "@/pages/dashboard/Settings"
+import Rewards from "@/pages/dashboard/Rewards"
 import ProtectedRoute from "./components/protectedRoute"
 import Business from "./pages/other/Business"
 import Wallet from "@/pages/Wallet.tsx"
@@ -67,6 +68,16 @@ export function AppRouter() {
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/rewards"
+          element={
+            <ProtectedRoute>
+              <Rewards />
+            </ProtectedRoute>
+          }
+        />
+
       </Routes>
     </BrowserRouter>
   )

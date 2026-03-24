@@ -37,7 +37,7 @@ export function AppSidebar({ name }: { name: string }) {
         <div className="flex items-center gap-3 px-2 py-2">
           <div className="flex flex-col text-sm">
             <span className="text-xs text-muted-foreground">
-              Usuario
+              User
             </span>
             <span className="font-semibold">{name}</span>
           </div>
@@ -51,7 +51,7 @@ export function AppSidebar({ name }: { name: string }) {
         <SidebarGroup>
 
           <SidebarGroupLabel>
-            Navegación
+            Navigation
           </SidebarGroupLabel>
 
           <SidebarGroupContent>
@@ -68,14 +68,21 @@ export function AppSidebar({ name }: { name: string }) {
               <SidebarMenuItem>
                 <SidebarMenuButton onClick={() => navigate("/customers")}>
                   <Users size={18} />
-                  Clientes
+                  Clients
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
               <SidebarMenuItem>
                 <SidebarMenuButton onClick={() => navigate("/campaigns")}>
                   <Megaphone size={18} />
-                  Campañas
+                  Campaigns
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton onClick={() => navigate("/rewards")}>
+                  <Megaphone size={18} />
+                  Rewards
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
@@ -102,7 +109,7 @@ export function AppSidebar({ name }: { name: string }) {
               onClick={handleLogout}
             >
               <LogOut size={18} />
-              Cerrar sesión
+              Log out
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

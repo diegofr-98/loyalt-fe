@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import DashboardLayout from "@/layouts/DashboardLayout"
 import { SidebarTrigger } from "@/components/ui/sidebar"
+import { Card, CardContent } from "@/components/ui/card"
 
 import { DataTable } from "@/components/customers/data-table"
 import { columns } from "@/components/customers/columns"
@@ -10,7 +11,6 @@ import { fetchCustomersByBusinessId } from "@/api/requests"
 import type { Customer } from "@/api/types"
 
 export default function Customers() {
-
   const { business } = useBusiness()
   const { session } = useAuth()
 
@@ -41,26 +41,23 @@ export default function Customers() {
   return (
     <DashboardLayout>
       <div className="p-8 space-y-8">
-
         <div className="flex items-center gap-4">
           <SidebarTrigger />
-
-          <div>
-            <h1 className="text-3xl font-bold">Clientes</h1>
-            <p className="text-muted-foreground">
-              Lista de clientes registrados
-            </p>
-          </div>
         </div>
+      </div>
 
-        <DataTable
-          columns={columns}
-          data={customers}
-          page={page}
-          totalPages={totalPages}
-          onPageChange={loadCustomers}
-        />
-
+      <div className="p-8 space-y-6">
+        <Card>
+          <CardContent className="p-6">
+            <DataTable
+              columns={columns}
+              data={customers}
+              page={page}
+              totalPages={totalPages}
+              onPageChange={loadCustomers}
+            />
+          </CardContent>
+        </Card>
       </div>
     </DashboardLayout>
   )

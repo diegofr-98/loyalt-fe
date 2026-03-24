@@ -36,8 +36,6 @@ export type CreateCustomer = {
   businessId: string
 }
 
-
-
 export type Campaign = {
   name: string
   startDate: string
@@ -52,4 +50,6 @@ export type Reward = {
   businessId: string
   name: string
   costPoints: number
+  imgUrl?: string
+  active?: boolean
 }
